@@ -14,7 +14,7 @@ class Product extends Model
 
     protected $visible =['name','description','quantity','price','image','create_user_id'];
 
-    public function category()
+    public function categories()
     {
     return $this->belongsToMany(Category::class);
     }

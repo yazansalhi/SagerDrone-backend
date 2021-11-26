@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use App\Category;
-use App\ProductCategory;
+use App\CategoryProduct;
 
-class ProductsController extends Controller
+class ProductController extends Controller
 {
     public function index()
     {
@@ -45,7 +45,7 @@ class ProductsController extends Controller
       
          $product =  Product::create($request->all());
          $product = Product::find($product->id);
-         $product->category()->sync($categoryIds);
+         $product->categories()->sync($categoryIds);
            
         return response()->json([
             'status' => "success",
@@ -73,7 +73,7 @@ class ProductsController extends Controller
        
 
          $product->update($request->all());
-         $product->category()->sync($categoryIds);
+         $product->categories()->sync($categoryIds);
 
         return response()->json([
             'status' => "success",

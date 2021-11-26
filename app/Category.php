@@ -11,9 +11,9 @@ class Category extends Model
 
     protected $fillable =['name'];
 
-    protected $visible =['name'];
+    protected $visible =['name','products'];
 
-    public function product()
+    public function products()
     {
     return $this->belongsToMany(Product::class);
     }
