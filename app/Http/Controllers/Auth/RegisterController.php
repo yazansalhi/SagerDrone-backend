@@ -6,7 +6,9 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -28,7 +30,6 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -50,8 +51,8 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:user'],
+            'password' => ['required', 'string', 'min:8'],
         ]);
     }
 
@@ -63,10 +64,46 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $token = Str::random(60);
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'api_token' => hash('sha256', $token),
         ]);
+    }
+    protected function register(Request $request)
+    {
+        $errors = $this->validator($request->all())->errors();
+        if (count($errors)) {
+            
+            $errorResponse = $this->validationErrorsToString($errors);
+           
+            return response()->json([
+                    'status' => "failed",
+                    'data' => [
+                        'errors' => $errorResponse
+                    ]
+                ],
+                400
+            );
+        }
+        $user = $this->create($request->all());
+        
+        return response()->json([
+            'status' => "success",
+            'data' => $user,
+        ],
+        200
+    );
+    }
+    private function validationErrorsToString($errorsArray)
+    {
+        $validationArr = array();
+        foreach ($errorsArray->toArray() as $key => $value) {
+            $validationArr[$key] = $value[0];
+        }
+        return $validationArr;
     }
 }
