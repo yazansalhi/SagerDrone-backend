@@ -17,3 +17,11 @@ Route::post('/register', 'Auth\RegisterController@register');
 Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
 
+Route::group(['middleware' => 'auth:api'], function () {
+	Route::get('/products', 'ProductsController@index');
+    Route::post('/products', 'ProductsController@create');
+    Route::put('/products/{id}', 'ProductsController@edit');
+    Route::delete('/products/{id}', 'ProductsController@destroy');
+
+    Route::post('/products/remove-quantity', 'ProductsController@removeQuantity');
+});
