@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use App\Notifications\MyOwnResetPassword;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -43,4 +43,9 @@ class User extends Authenticatable
     public function products(){
         return $this->hasMany(Product::class);
     }
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new MyOwnResetPassword($token));
+    }
+
 }

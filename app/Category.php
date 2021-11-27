@@ -11,7 +11,7 @@ class Category extends Model
 
     protected $fillable =['name'];
 
-    protected $visible =['name','products'];
+    protected $visible =['id','name','products'];
 
     public function products()
     {
