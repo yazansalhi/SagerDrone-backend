@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 
 class LoginController extends Controller
@@ -68,7 +69,12 @@ class LoginController extends Controller
             400
         );
         }
-   
+
+        $token = Str::random(60);
+        auth()->user()->api_token = hash('sha256', $token);
+        auth()->user()->save();
+
+
         return response()->json([
             'status' => "success",
             'data' => auth()->user(),

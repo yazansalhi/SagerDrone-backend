@@ -82,22 +82,4 @@ class CategoryController extends Controller
             200
         );
     }
-    public function removeQuantity(Request $request){
-
-        $productId = $request->get('product_id');
-        if(empty($productId)) return response()->json(['status'=>'failed','error' => 'product_id field is mandatory'],400);
-
-        $products = new Product();
-        $product = $products->find($productId);
-        if($product->quantity <= 1) return response()->json(['status'=>'failed','error' => 'there is one quantity from this product'],400);
-        $product->quantity = $product->quantity - 1;
-        $product->save();
-
-        return response()->json([
-            'status' => "success",
-            'data' =>$product,
-            ],
-            200
-        );
-    }
 }

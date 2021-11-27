@@ -13,15 +13,16 @@ use Illuminate\Http\Request;
 |
 */
 
-//Auth
-Route::post('/login', 'Auth\LoginController@login');
-Route::post('/register', 'Auth\RegisterController@register');
-Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
-Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
-//
+    //Auth
+    Route::post('/login', 'Auth\LoginController@login');
+    Route::post('/register', 'Auth\RegisterController@register');
+    Route::post('/password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
+    Route::post('/password/reset', 'Auth\ResetPasswordController@reset')->name('password.reset');
+    //
 
 Route::group(['middleware' => 'auth:api'], function () {
-    //product 
+
+    //products 
 	Route::get('/products', 'ProductController@index');
     Route::post('/products', 'ProductController@create');
     Route::put('/products/{id}', 'ProductController@edit');
@@ -29,11 +30,18 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/products/remove-quantity', 'ProductController@removeQuantity');
     //
 
-    //category
+    //categories
     Route::get('/categories', 'CategoryController@index');
     Route::post('/categories', 'CategoryController@create');
     Route::put('/categories/{id}', 'CategoryController@edit');
     Route::delete('/categories/{id}', 'CategoryController@destroy');
+    //
+
+    //users
+    Route::get('/users', 'UserController@index');
+    Route::post('/users', 'UserController@create');
+    Route::put('/users/{id}', 'UserController@edit');
+    Route::delete('/users/{id}', 'UserController@destroy');
     //
 
 });

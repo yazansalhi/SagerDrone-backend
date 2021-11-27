@@ -20,8 +20,12 @@ class CreateTableProduct extends Migration
             $table->integer('quantity')->default('1');
             $table->float('price')->default('1');
             $table->string('image')->nullable();
-            $table->integer('create_user_id')->nullable();
+            $table->integer('create_user_id')->unsigned()->nullable();
             $table->timestamps();
+        });
+
+        Schema::table('product', function (Blueprint $table) {
+            $table->foreign('create_user_id')->references('id')->on('user');
         });
     }
 
